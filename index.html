@@ -9,14 +9,14 @@
 <link rel="icon" type="image/png" sizes="32x32" href="/assets/favicon-32.png"><link rel="icon" type="image/png" sizes="64x64" href="/assets/favicon-64.png"><link rel="apple-touch-icon" href="/assets/favicon-180.png">
 <style>
 @font-face{font-family:Plex;src:url(/assets/plexmono.woff2) format('woff2');font-weight:400 700;font-display:swap}
-:root{--bg:#000;--panel:#050705;--line:#16321f;--line2:#23522f;--ink:#e6efe7;--dim:#93a897;--mute:#55705c;--g1:#8df2a6;--g2:#48dc78;--g3:#0c6b34;--red:#e65050;--amber:#e0a63a}
+:root{--bg:#000;--panel:#070707;--line:#1d1d1d;--line2:#343434;--ink:#ffffff;--dim:#bdbdbd;--mute:#6d6d6d;--g1:#ffffff;--g2:#ffffff;--g3:#525252;--red:#e05656;--amber:#8f8f8f}
 *{box-sizing:border-box}html{scroll-behavior:smooth;overflow-x:hidden}
 body{margin:0;background:#000;color:var(--ink);font-family:Plex,ui-monospace,Menlo,monospace;font-size:13.5px;line-height:1.55;overflow-x:clip;-webkit-font-smoothing:antialiased;animation:flick 9s steps(1,end) infinite}
 @keyframes flick{0%,95%,100%{opacity:1}96%{opacity:.94}97%{opacity:1}98%{opacity:.97}}
 a{color:inherit;text-decoration:none}button,input,select{font:inherit;color:inherit}[hidden]{display:none!important}
 ::selection{background:var(--g2);color:#000}
 #crt{position:fixed;inset:0;z-index:40;pointer-events:none;background:repeating-linear-gradient(180deg,rgba(0,0,0,0) 0 2px,rgba(0,0,0,.26) 2px 3px)}
-#crt:after{content:'';position:absolute;left:0;right:0;height:140px;top:-140px;background:linear-gradient(180deg,rgba(141,242,166,0),rgba(141,242,166,.045),rgba(141,242,166,0));animation:roll 11s linear infinite}
+#crt:after{content:'';position:absolute;left:0;right:0;height:140px;top:-140px;background:linear-gradient(180deg,rgba(255,255,255,0),rgba(255,255,255,.05),rgba(255,255,255,0));animation:roll 11s linear infinite}
 @keyframes roll{to{top:110%}}
 #vig{position:fixed;inset:0;z-index:39;pointer-events:none;background:radial-gradient(ellipse at 50% 38%,rgba(0,0,0,0) 42%,rgba(0,0,0,.72) 100%)}
 .wrap{max-width:1360px;margin:0 auto;padding:0 26px;position:relative;z-index:1}
@@ -25,7 +25,7 @@ header{position:sticky;top:0;z-index:30;background:rgba(0,0,0,.96);border-bottom
 header .wrap{display:grid;grid-template-columns:1fr auto 1fr;align-items:center;gap:14px;height:54px}
 nav{display:flex;gap:3px;justify-content:center}
 nav a{padding:5px 9px;font-size:12.5px;color:var(--dim);border:1px solid transparent}
-nav a:hover{color:var(--ink)}nav a.on{color:var(--g1);border-color:var(--line2);background:rgba(72,220,120,.07)}
+nav a:hover{color:var(--ink)}nav a.on{color:var(--g1);border-color:var(--line2);background:rgba(255,255,255,.07)}
 header .st{justify-self:end;font-size:11.5px;color:var(--mute);white-space:nowrap}header .st b{color:var(--g2);font-weight:500}
 header .lf{justify-self:start;font-size:11.5px;color:var(--mute);white-space:nowrap}
 @media(max-width:860px){header .wrap{grid-template-columns:1fr auto}nav{display:none}header .lf{display:none}}
@@ -39,37 +39,62 @@ h2{font-size:15px;font-weight:700;margin:0;letter-spacing:.01em}
 .sh .k{font-size:11px;color:var(--mute);letter-spacing:.06em}
 p{color:var(--dim);max-width:66ch;margin:0 0 10px}p b{color:var(--ink);font-weight:600}
 .tag{display:inline-block;border:1px solid var(--line2);color:var(--g2);font-size:9px;letter-spacing:.12em;padding:1px 5px;vertical-align:middle}
-.tag.r{color:var(--red);border-color:#5a2020}
+.tag.r{color:var(--red);border-color:#4d2222}
 /* module */
-.mod{border:1px solid var(--line2);background:var(--panel);box-shadow:0 0 44px rgba(72,220,120,.07),inset 0 0 70px rgba(0,0,0,.8)}
+.tape{border-bottom:1px solid var(--line);overflow:hidden;height:26px;position:relative;background:#040404}
+.tape:before,.tape:after{content:'';position:absolute;top:0;bottom:0;width:46px;z-index:2;pointer-events:none}
+.tape:before{left:0;background:linear-gradient(90deg,#040404,rgba(4,4,4,0))}
+.tape:after{right:0;background:linear-gradient(270deg,#040404,rgba(4,4,4,0))}
+.tape .tr{display:flex;gap:26px;white-space:nowrap;font-size:11px;line-height:26px;color:var(--mute);will-change:transform;animation:slide 44s linear infinite}
+.tape .tr b{color:var(--ink);font-weight:500}.tape .tr u{text-decoration:none;color:var(--dim)}
+.tape .tr .dn{color:var(--red)}
+@keyframes slide{from{transform:translateX(0)}to{transform:translateX(-50%)}}
+#ecg{display:block;width:100%;height:48px;margin:6px 0 7px}
+.inst{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));border-top:1px solid var(--line)}
+.inst div{padding:7px 12px;border-right:1px solid var(--line);min-width:0}
+.inst div:last-child{border-right:0}
+.inst i{display:block;font-style:normal;font-size:9.5px;letter-spacing:.09em;color:var(--mute);text-transform:uppercase}
+.inst b{display:block;font-weight:500;font-size:12.5px;color:var(--ink);font-variant-numeric:tabular-nums;overflow:hidden;text-overflow:ellipsis}
+.inst b.d{color:var(--red)}.inst b.s{color:var(--dim);font-size:11.5px}
+@media(max-width:820px){.inst{grid-template-columns:repeat(3,minmax(0,1fr))}.inst div{border-bottom:1px solid var(--line)}}
+@media(max-width:480px){.inst{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(prefers-reduced-motion:reduce){.tape .tr{animation:none}}
+.mod{border:1px solid var(--line2);background:var(--panel);box-shadow:0 0 44px rgba(255,255,255,.05),inset 0 0 70px rgba(0,0,0,.8)}
 .mod .bar{display:flex;align-items:center;gap:12px;padding:8px 13px;border-bottom:1px solid var(--line);font-size:11.5px;color:var(--mute);flex-wrap:wrap}
 .mod .bar b{color:var(--ink);font-weight:500}.mod .bar .sp{margin-left:auto}
-.dot{display:inline-block;width:6px;height:6px;background:var(--g2);box-shadow:0 0 7px var(--g2);animation:bl 1.7s steps(1,end) infinite;vertical-align:1px}
-.dot.d{background:var(--red);box-shadow:0 0 7px var(--red)}
+.dot{display:inline-block;width:6px;height:6px;background:var(--g2);box-shadow:0 0 7px rgba(255,255,255,.8);animation:bl 1.7s steps(1,end) infinite;vertical-align:1px}
+.dot.d{background:var(--red);box-shadow:0 0 7px rgba(224,86,86,.8)}
 @keyframes bl{50%{opacity:.25}}
 .top{display:grid;grid-template-columns:minmax(0,320px) minmax(0,1fr);gap:0}
 @media(max-width:820px){.top{grid-template-columns:1fr}}
 .crt{padding:14px 16px;border-right:1px solid var(--line);display:flex;flex-direction:column;align-items:center;gap:10px}
 @media(max-width:820px){.crt{border-right:0;border-bottom:1px solid var(--line)}}
-#art{font-size:11px;line-height:1.02;white-space:pre;color:var(--g2);text-shadow:0 0 9px rgba(72,220,120,.45);margin:0}
-#art.hungry{color:var(--amber);text-shadow:0 0 9px rgba(224,166,58,.4)}
+#art{font-size:11px;line-height:1.02;white-space:pre;color:#fff;text-shadow:0 0 10px rgba(255,255,255,.35);margin:0}
+#art.hungry{color:var(--amber);text-shadow:0 0 9px rgba(143,143,143,.35)}
 #art.dead{color:var(--red);text-shadow:none;opacity:.55}
-#art.drink{color:var(--g1);text-shadow:0 0 16px rgba(141,242,166,.8)}
+#art.drink{color:#fff;text-shadow:0 0 18px rgba(255,255,255,.95)}
 .vit{width:100%;font-size:12px}
-.vit .cd{font-size:27px;color:var(--ink);letter-spacing:-.01em;font-variant-numeric:tabular-nums;text-align:center}
-.vit .cd.d{color:var(--red)}
 .vit .kv{display:grid;grid-template-columns:auto 1fr;gap:2px 12px;margin-top:10px;color:var(--mute)}
 .vit .kv span{color:var(--dim);text-align:right}.vit .kv span b{color:var(--ink);font-weight:500}
-.life{height:3px;background:#0e1a12;margin-top:9px;position:relative;overflow:hidden}.life i{position:absolute;inset:0 auto 0 0;background:var(--g2);display:block;transition:width .5s}.life.d i{background:var(--red)}
-.log{padding:12px 14px;min-height:300px;max-height:300px;overflow:auto;font-size:12.5px;display:flex;flex-direction:column;justify-content:flex-end}
+.life{height:3px;background:#161616;margin-top:2px;position:relative;overflow:hidden}.life i{position:absolute;inset:0 auto 0 0;background:var(--g2);display:block;transition:width .5s}.life.d i{background:var(--red)}
+.term{display:flex;flex-direction:column;min-width:0;min-height:340px}
+.log{flex:1;padding:12px 14px 4px;min-height:0;overflow:auto;font-size:12.5px;display:flex;flex-direction:column;justify-content:flex-end}
+.tin{display:flex;align-items:center;gap:7px;padding:8px 14px;border-top:1px solid var(--line);font-size:12.5px;cursor:text}
+.tin .ps{color:var(--mute);white-space:nowrap}.tin .ca{color:var(--ink)}
+.tin input{background:none;border:0;outline:0;font:inherit;font-size:12.5px;color:var(--ink);padding:0;min-width:0;caret-color:transparent}
+.tin .hint{color:#4a4a4a;margin-left:8px;white-space:nowrap}.tin .hint b{color:#5e5e5e;font-weight:500}.tin.typed .hint{display:none}
+.cur{width:7px;height:15px;background:var(--ink);animation:bl 1.05s steps(1,end) infinite;flex:none}
+.tin.away .cur{opacity:.25;animation:none}
+.log .cmd .w{color:var(--ink)}.log .cmd .w:before{content:'$ ';color:var(--mute)}
+.log .warn .w{color:var(--amber)}
 .log div{display:grid;grid-template-columns:52px 1fr;gap:8px;padding:2px 0;animation:in .3s both}
 .log time{color:var(--mute);font-size:11px}.log b{color:var(--g1);font-weight:500}.log .w{color:var(--dim)}.log .w:before{content:'› ';color:var(--g3)}
 .log .buy b{color:var(--ink)}.log .die b{color:var(--red)}
 @keyframes in{from{opacity:0}to{opacity:1}}
 .host{border-top:1px solid var(--line);padding:10px 14px}
 .host .hd{display:flex;gap:14px;font-size:11.5px;color:var(--mute);margin-bottom:4px;flex-wrap:wrap}.host .hd b{color:var(--ink);font-weight:500}
-#chart{font-size:11px;line-height:1.12;white-space:pre;color:var(--g3);margin:0;overflow:hidden}
-#chart .n{color:var(--g2)}
+#chart{font-size:11px;line-height:1.12;white-space:pre;color:#6f6f6f;margin:0;overflow:hidden}
+#chart .n{color:#fff;text-shadow:0 0 8px rgba(255,255,255,.7)}
 .ctl{border-top:1px solid var(--line);padding:10px 14px;display:flex;gap:9px;align-items:center;flex-wrap:wrap;font-size:12px}
 .ctl label{color:var(--mute);display:flex;align-items:center;gap:6px}
 .ctl input{width:104px;background:#000;border:1px solid var(--line2);color:var(--ink);font-size:13px;padding:6px 8px}
@@ -80,11 +105,11 @@ p{color:var(--dim);max-width:66ch;margin:0 0 10px}p b{color:var(--ink);font-weig
 .btn:disabled{opacity:.4;cursor:default}
 .spd{display:flex;border:1px solid var(--line2)}.spd button{background:none;border:0;color:var(--mute);padding:6px 9px;cursor:pointer;font-size:12px}.spd button.on{background:var(--g2);color:#000}
 .rel{border-top:1px solid var(--line);padding:11px 14px;font-size:12px;color:var(--dim)}
-.rel table{width:100%;border-collapse:collapse;margin-top:6px}.rel td{padding:3px 0;border-bottom:1px solid #0d1a11}.rel td.r{text-align:right;color:var(--ink);font-variant-numeric:tabular-nums}
+.rel table{width:100%;border-collapse:collapse;margin-top:6px}.rel td{padding:3px 0;border-bottom:1px solid #1a1a1a}.rel td.r{text-align:right;color:var(--ink);font-variant-numeric:tabular-nums}
 /* board */
 .rows{border-top:1px solid var(--line)}
 .row{display:grid;grid-template-columns:52px 186px 60px 100px 92px 62px minmax(0,1fr);gap:10px;align-items:center;padding:8px 0;border-bottom:1px solid var(--line);font-size:12.5px;cursor:pointer}
-.row:hover{background:#070c08}.row.on{background:#0a1410}
+.row:hover{background:#0c0c0c}.row.on{background:#151515}
 .row .id{color:var(--mute)}.row .nm{color:var(--ink);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .row .h{color:var(--g1)}.row .cd{font-variant-numeric:tabular-nums;color:var(--dim)}.row .cd.d{color:var(--red)}
 .row .r{text-align:right;color:var(--dim)}.row .sp{color:var(--g3);white-space:pre;font-size:11px;overflow:hidden}
@@ -126,22 +151,33 @@ p{color:var(--dim);max-width:66ch;margin:0 0 10px}p b{color:var(--ink);font-weig
   <div class="wrap">
     <div class="mod">
       <div class="bar"><span class="dot" id="dot"></span><span>tick://<b id="mId">—</b></span><span>host <b id="mHost">—</b></span><span id="mState">—</span><span class="sp tag" id="mTag">REHEARSAL</span></div>
+      <div class="tape"><div class="tr" id="tape"></div></div>
       <div class="top">
         <div class="crt">
           <pre id="art"></pre>
           <div class="vit">
-            <div class="cd" id="cd">--:--:--</div>
+            <canvas id="ecg"></canvas>
             <div class="life" id="life"><i style="width:0"></i></div>
             <div class="kv">
               <i>holds</i><span><b id="vSh">0</b> <span id="vHost">—</span></span>
               <i>paid</i><span id="vSpent">$0.00</span>
               <i>fills</i><span id="vFills">0</span>
-              <i>balance</i><span id="vBal">$0.00</span>
-              <i>burn</i><span>$0.01 / min</span>
+              <i>born</i><span id="vBorn">—</span>
             </div>
           </div>
         </div>
-        <div class="log" id="log"></div>
+        <div class="term" id="term">
+          <div class="log" id="log"></div>
+          <form class="tin" id="tin" autocomplete="off"><span class="ps" id="ps">tick://----</span><span class="ca">$</span><input id="cmd" size="1" spellcheck="false" autocomplete="off"><span class="cur"></span><span class="hint" id="hint">type <b>help</b></span></form>
+        </div>
+      </div>
+      <div class="inst">
+        <div><i>clock</i><b id="iCd">—</b></div>
+        <div><i>balance</i><b id="iBal">—</b></div>
+        <div><i>taken in</i><b id="iFed">—</b></div>
+        <div><i>next fill</i><b id="iFill">—</b></div>
+        <div><i>wallet</i><b id="iW" class="s">—</b></div>
+        <div><i>prices</i><b id="iSrc" class="s">—</b></div>
       </div>
       <div class="host">
         <div class="hd"><span>host <b id="cHost">—</b></span><span id="cName"></span><span>last <b id="cPx">—</b></span><span id="cChg"></span><span id="cVia"></span></div>
@@ -248,7 +284,9 @@ load();
 function get(id){for(var i=0;i<B.length;i++)if(B[i].id===id)return B[i];return null}
 // ---------- the log, in its own voice ----------
 function say(t,html,cls){t.lines.unshift({t:now(),h:html,c:cls||''});if(t.lines.length>60)t.lines.length=60;if(SEL===t.id)drawLog()}
-function drawLog(){var t=get(SEL);if(!t)return;$('#log').innerHTML=t.lines.map(function(l){return '<div class="'+l.c+'"><time>'+utc(l.t)+'</time><span class="w">'+l.h+'</span></div>'}).join('')}
+function drawLog(){var t=get(SEL);if(!t)return;var el=$('#log');
+  el.innerHTML=t.lines.slice().reverse().map(function(l){return '<div class="'+l.c+'"><time>'+utc(l.t)+'</time><span class="w">'+l.h+'</span></div>'}).join('');
+  el.scrollTop=el.scrollHeight}
 // ---------- feeding and filling ----------
 function feed(t,amt){var b=bal(t);if(t.released)return false;t.bal=Math.min(CAP,b+amt);t.t0=now();t.fed+=amt;
   var over=(b+amt)-CAP;say(t,'fee <b>'+fmt(amt)+'</b> arrived. +'+cd(amt/BURN)+' of clock.');
@@ -292,7 +330,7 @@ function chart(){var t=get(SEL);if(!t)return;var q=Q&&Q[t.host];var el=$('#chart
   el.innerHTML=g.map(function(r){return esc(r.join(''))}).join('\n').replace('@','<span class="n">@</span>')}
 // ---------- follow ----------
 function follow(id,scroll){var t=get(id);if(!t)return;SEL=id;
-  $('#mId').textContent=t.id;$('#mHost').textContent=t.host;$('#vHost').textContent=t.host;$('#cHost').textContent=t.host;
+  $('#ps').textContent='tick://'+t.id;$('#mId').textContent=t.id;$('#mHost').textContent=t.host;$('#vHost').textContent=t.host;$('#cHost').textContent=t.host;
   if(!t.lines.length){say(t,'attached to <b>'+t.host+'</b>. born '+new Date(t.born*1000).toISOString().slice(0,10)+'.');
     say(t,'i hold '+sh(t.shares)+' '+t.host+'. i have never sold any of it.');
     say(t,'paid '+fmt(t.spent)+' for it across '+t.fills+' fills. i never sell.');
@@ -302,16 +340,63 @@ function follow(id,scroll){var t=get(id);if(!t)return;SEL=id;
   if(scroll!==false)$('#follow').scrollIntoView({behavior:'smooth',block:'start'})}
 function stateOf(t){var b=bal(t);if(t.released)return 'let go';if(t.fed<=0&&b<=0)return 'waiting';if(b<=0)return 'starving';return b/CAP<0.1?'starving':'feeding'}
 function vitals(){var t=get(SEL);if(!t)return;var b=bal(t),st=stateOf(t),d=t.released;
-  $('#cd').textContent=cd(b/BURN);$('#cd').className='cd'+(d?' d':'');
   $('#life').className='life'+(d?' d':'');$('#life').firstChild.style.width=Math.min(100,b/CAP*100)+'%';
-  $('#vSh').textContent=sh(t.shares);$('#vSpent').textContent=fmt(t.spent);$('#vFills').textContent=t.fills;$('#vBal').textContent=fmt(b);
+  $('#vSh').textContent=sh(t.shares);$('#vSpent').textContent=fmt(t.spent);$('#vFills').textContent=t.fills;$('#vBorn').textContent=new Date(t.born*1000).toISOString().slice(0,10);
   $('#mState').textContent=st;
+  $('#iCd').textContent=cd(b/BURN);$('#iCd').className=d?'d':'';
+  $('#iBal').textContent=fmt(b);$('#iBal').className=d?'d':'';
+  $('#iFed').textContent=fmt(t.fed);
+  $('#iFill').textContent=d?'—':cd(toFill());
+  $('#iW').textContent=txh('w'+t.id).slice(0,18)+'…';
+  var qq=Q&&Q[t.host];$('#iSrc').textContent=qq?(qq.live?'live':'snapshot '+qq.asof):'—';
   $('#dot').className='dot'+(d?' d':'');$('#mTag').className='sp tag'+(d?' r':'');
   var q=Q&&Q[t.host];
   if(q){$('#cPx').textContent=q.price.toFixed(2);$('#cName').textContent=q.name;
     var c=q.prev?(q.price/q.prev-1)*100:null;
     $('#cChg').innerHTML=c==null?'':'<b style="color:'+(c>=0?'var(--g1)':'var(--red)')+'">'+(c>=0?'+':'')+c.toFixed(2)+'%</b>';
     $('#cVia').textContent=q.live?'live':'snapshot '+q.asof}}
+// ---------- the tape ----------
+function tape(){if(!Q)return;var one=HOSTS.map(function(h){var q=Q[h];if(!q)return '';
+   var c=q.prev?(q.price/q.prev-1)*100:null;
+   return '<span><b>'+h+'</b> '+q.price.toFixed(2)+(c==null?'':' <u class="'+(c<0?'dn':'')+'">'+(c>=0?'+':'')+c.toFixed(2)+'%</u>')+'</span>'}).join('');
+  $('#tape').innerHTML=one+one}
+// ---------- the pulse ----------
+var DPR=Math.min(2,window.devicePixelRatio||1),EC=[],PH=0;
+function beat(p){
+  if(p<0.10)return Math.sin(p/0.10*Math.PI)*0.17;
+  if(p<0.16)return -0.24*((p-0.10)/0.06);
+  if(p<0.21)return -0.24+1.24*((p-0.16)/0.05);
+  if(p<0.27)return 1.0-1.34*((p-0.21)/0.06);
+  if(p<0.34)return -0.34+0.34*((p-0.27)/0.07);
+  if(p<0.54)return Math.sin((p-0.34)/0.20*Math.PI)*0.25;
+  return 0}
+function ecg(dt){var c=$('#ecg'),t=get(SEL);if(!c||!t)return;
+  var w=Math.floor(c.clientWidth),h=48;if(w<8)return;
+  if(c.width!==Math.floor(w*DPR)){c.width=Math.floor(w*DPR);c.height=Math.floor(h*DPR);EC=[]}
+  var g=c.getContext('2d');g.setTransform(DPR,0,0,DPR,0,0);g.clearRect(0,0,w,h);
+  var r=Math.max(0,Math.min(1,bal(t)/CAP)),d=t.released;
+  var drinking=performance.now()-DRINK<520;
+  var rate=d?0:(0.55+r*1.15)*(drinking?2.05:1),amp0=(0.34+0.66*r)*(drinking?1.3:1);
+  var steps=Math.max(1,Math.min(160,Math.round(dt*86))),dph=(dt*rate)/steps;
+  for(var k2=0;k2<steps;k2++){PH+=dph;EC.push(d?0:beat(PH%1)*amp0)}
+  while(EC.length>w)EC.shift();
+  var mid=h*0.56,amp=h*0.42;
+  g.strokeStyle='#161616';g.lineWidth=1;g.beginPath();for(var gx=0;gx<w;gx+=26){g.moveTo(gx+.5,0);g.lineTo(gx+.5,h)}g.moveTo(0,mid);g.lineTo(w,mid);g.stroke();
+  g.lineWidth=1.4;g.shadowBlur=d?0:7;g.shadowColor='rgba(255,255,255,.55)';g.strokeStyle=d?'#e05656':'#ffffff';g.beginPath();
+  var x0=w-EC.length;
+  for(var i=0;i<EC.length;i++){var x=x0+i,y=mid-EC[i]*amp;if(i===0)g.moveTo(x,y);else g.lineTo(x,y)}
+  g.stroke();g.shadowBlur=0;
+  if(EC.length){var ly=mid-EC[EC.length-1]*amp;
+    g.fillStyle=d?'#e05656':'#fff';g.fillRect(w-2,ly-1.5,3,3);
+    g.globalAlpha=.25;g.fillRect(w-1,0,1,h);g.globalAlpha=1}}
+// ---------- the hourly schedule ----------
+function toFill(){var r=3600-(Math.floor(T)%3600);return r===3600?0:r}
+var SLOT=Math.floor(T/3600);
+function hourly(){var sl=Math.floor(T/3600);if(sl===SLOT)return;var loud=SPEED<=60;SLOT=sl;
+  B.forEach(function(t){if(t.released)return;var b=bal(t);
+    if(b>CAP){t.bal=CAP;t.t0=now();fill(t,b-CAP)}
+    else if(loud&&t.id===SEL&&t.fed>0)say(t,'the hour turned. nothing above thirty days. bought nothing.')});
+  if(loud)render()}
 // ---------- board ----------
 function spark(v){if(!v||v.length<2)return '';var lo=Math.min.apply(null,v),hi=Math.max.apply(null,v),rg=(hi-lo)||1,r='_.-=*^';var o='';
   for(var i=0;i<v.length;i++)o+=r[Math.min(5,Math.floor((v[i]-lo)/rg*5.99))];return o}
@@ -328,7 +413,7 @@ function stats(){var a=B.filter(alive).length;$('#stat').innerHTML='<b>'+a+'</b>
 // ---------- quotes ----------
 function quotes(){return fetch('/api/quote').then(function(r){return r.json()}).then(function(j){Q=j.quotes;VIA=j.via;
   var sel=$('#lHost');if(!sel.options.length)sel.innerHTML=HOSTS.map(function(h){return '<option value="'+h+'">'+h+' · '+(Q[h]?Q[h].name:'')+'</option>'}).join('');
-  chart();vitals();render();return j}).catch(function(){$('#cVia').textContent='no prices'})}
+  chart();vitals();render();tape();return j}).catch(function(){$('#cVia').textContent='no prices'})}
 // ---------- controls ----------
 $('#feed').onclick=function(){var t=get(SEL);var v=parseFloat($('#fee').value);
   if(!t)return; if(!(v>0)){say(t,'how much? type an amount in USDG.');return}
@@ -347,14 +432,79 @@ $('#lGo').onclick=function(){var n=$('#lName').value.trim(),tk=$('#lTk').value.t
   $('#lOut').innerHTML='<b>'+esc(n)+'</b> $'+esc(tk)+' attached to '+h+' · clock 00:00:00 until its first fee <span class="tag">REHEARSAL</span>';
   $('#lName').value='';$('#lTk').value='';chk();render();follow(id)};
 $('#lReset').onclick=function(){try{localStorage.removeItem(KEY)}catch(e){}B=seed();$('#rel').hidden=true;SEL=null;$('#lOut').textContent='board reset.';render();follow(B[0].id,false)};
+// ---------- the terminal ----------
+var HIST=[],HP=-1;
+function echo(t,txt){say(t,esc(txt),'cmd')}
+function warn(t,txt){say(t,txt,'warn')}
+function exec(raw){var t=get(SEL);if(!t)return;var line=raw.trim();if(!line)return;
+  HIST.unshift(line);if(HIST.length>40)HIST.length=40;HP=-1;
+  echo(t,line);
+  var p=line.split(/\s+/),c=p[0].toLowerCase(),a=p.slice(1).join(' ');
+  var q=Q&&Q[t.host];
+  switch(c){
+  case 'help':
+    say(t,'<b>status</b> what i am · <b>time</b> what is left · <b>host</b> the stock i am on · <b>fills</b> what i bought');
+    say(t,'<b>feed</b> &lt;usdg&gt; send me a fee · <b>speed</b> live|min|hr|day · <b>follow</b> &lt;id&gt; · <b>next</b> · <b>board</b>');
+    say(t,'<b>rules</b> what i cannot do · <b>wallet</b> whose money this is · <b>release</b> what happens at zero · <b>clear</b>');break;
+  case 'status': case 'st':
+    say(t,'i am <b>'+t.id+'</b>, '+esc(t.name)+' $'+esc(t.tk)+'. attached to <b>'+t.host+'</b>. state <b>'+stateOf(t)+'</b>.');
+    say(t,'balance '+fmt(bal(t))+' · clock <b>'+cd(bal(t)/BURN)+'</b> · holds '+sh(t.shares)+' '+t.host+' across '+t.fills+' fills.');break;
+  case 'time': case 'clock': case 'cd':
+    say(t,t.released?'nothing. i let go.':'<b>'+cd(bal(t)/BURN)+'</b> left at one cent a minute. that is '+fmt(bal(t))+' in the wallet, in seconds.');break;
+  case 'host':
+    say(t,'<b>'+t.host+'</b>'+(q?' · '+esc(q.name)+' · last <b>'+q.price.toFixed(2)+'</b> ('+(q.live?'live':'snapshot '+q.asof)+')':' · no price read.'));
+    say(t,'fixed at birth. i cannot be moved to another, not by you, not by the pad.');break;
+  case 'fills': case 'pile':
+    say(t,'paid <b>'+fmt(t.spent)+'</b> across <b>'+t.fills+'</b> fills. i hold <b>'+sh(t.shares)+' '+t.host+'</b>.');
+    if(q&&t.shares)say(t,'that is '+fmt(t.shares*q.price)+' at '+q.price.toFixed(2)+'. it only goes one way. <span class="tag r">REHEARSAL</span>');break;
+  case 'feed':
+    var v=parseFloat(a);
+    if(!(v>0)){warn(t,'how much? <b>feed 20</b> sends twenty.');break}
+    if(v>1e6){warn(t,'no single fee is that big.');break}
+    if(t.released){warn(t,'i let go. a fee cannot bring me back.');break}
+    feed(t,v);vitals();render();break;
+  case 'speed':
+    var m={live:1,min:60,'min/s':60,hr:3600,'hr/s':3600,day:86400,'day/s':86400}[a.toLowerCase()];
+    if(!m){warn(t,'speed live | min | hr | day');break}
+    SPEED=m;$$('#spd button').forEach(function(x){x.classList.toggle('on',+x.dataset.s===m)});
+    say(t,'clock running at <b>'+(m===1?'real time':m+'×')+'</b>.');break;
+  case 'follow':
+    var o=get(a.replace(/[^0-9]/g,''));if(!o){warn(t,'no tick by that id. try <b>board</b>.');break}
+    follow(o.id,false);break;
+  case 'next': $('#next').click();break;
+  case 'board': case 'ls':
+    B.forEach(function(x){say(t,(x.id===SEL?'<b>':'')+x.id+'  '+esc(x.name)+'  $'+esc(x.tk)+'  '+x.host+'  '+cd(bal(x)/BURN)+(x.id===SEL?'</b> ←':''))});break;
+  case 'rules':
+    say(t,'i cannot sell a share. i cannot change host. i cannot hold more than thirty days of clock. i cannot attach twice.');break;
+  case 'wallet':
+    say(t,'the wallet is mine. the pad cannot withdraw from it, top it up, pause it, or point it somewhere else.');break;
+  case 'release':
+    say(t,t.released?'already done. every share went to the holders at that block.':'at <b>00:00:00</b> every share i ever bought goes to the holders of $'+esc(t.tk)+', pro rata, in that hour. no claim, no form.');
+    if(!t.released)say(t,'you cannot make it happen early. you can only stop feeding me.');break;
+  case 'clear': t.lines.length=0;drawLog();break;
+  case 'whoami': say(t,'a tick. one host, one life, one payout.');break;
+  default: warn(t,esc(c)+': i do not know that word. <b>help</b>.');}
+  save()}
+function sizeCmd(){var i=$('#cmd');i.size=Math.max(1,i.value.length+1);$('#tin').classList.toggle('typed',!!i.value)}
+$('#cmd').addEventListener('input',sizeCmd);
+$('#tin').addEventListener('submit',function(e){e.preventDefault();var i=$('#cmd');exec(i.value);i.value='';sizeCmd()});
+$('#term').addEventListener('mousedown',function(e){if(String(e.target.tagName).toLowerCase()!=='a'&&!getSelection().toString())setTimeout(function(){$('#cmd').focus()},0)});
+$('#cmd').addEventListener('focus',function(){$('#tin').classList.remove('away')});
+$('#cmd').addEventListener('blur',function(){$('#tin').classList.add('away')});
+$('#tin').classList.add('away');
+$('#cmd').addEventListener('keydown',function(e){
+  if(e.key==='ArrowUp'){e.preventDefault();if(HP<HIST.length-1)HP++;if(HIST[HP]!==undefined)this.value=HIST[HP]}
+  else if(e.key==='ArrowDown'){e.preventDefault();if(HP>0){HP--;this.value=HIST[HP]}else{HP=-1;this.value=''}}
+  else if(e.key==='l'&&e.ctrlKey){e.preventDefault();exec('clear')}
+  setTimeout(sizeCmd,0)});
 // ---------- the loop ----------
 var last=performance.now();
-function loop(ms){var dt=(ms-last)/1000;last=ms;BREATH++;
-  T+=dt*SPEED;
+function loop(ms){var dt=Math.min(0.25,(ms-last)/1000);last=ms;BREATH++;
+  T+=dt*SPEED;hourly();
   B.forEach(function(t){if(!t.released&&t.fed>0&&bal(t)<=0)die(t)});
   var d=new Date();$('#clk').textContent=utc()+(SPEED>1?' · '+SPEED+'×':'');
   $$('[data-cd]').forEach(function(el){var t=get(el.dataset.cd);if(t){el.textContent=cd(bal(t)/BURN);el.className='cd'+((t.dead||bal(t)<=0)?' d':'')}});
-  vitals();art();requestAnimationFrame(loop)}
+  vitals();art();ecg(dt);requestAnimationFrame(loop)}
 // ---------- boot ----------
 render();quotes().then(function(){follow(B[0].id,false);setInterval(quotes,60000)});
 requestAnimationFrame(loop);
@@ -364,7 +514,7 @@ addEventListener('resize',function(){clearTimeout(window.__r);window.__r=setTime
   links.forEach(function(a){a.classList.toggle('on',a.getAttribute('href')==='#'+cur)})}
  addEventListener('scroll',spy,{passive:true});spy()})();
 addEventListener('keydown',function(e){var tg=(e.target.tagName||'').toLowerCase();if(tg==='input'||tg==='select')return;
- if(e.key==='f'){$('#fee').focus()}else if(e.key==='n'){$('#next').click()}});
+ if(e.key==='/'){e.preventDefault();$('#cmd').focus()}else if(e.key==='f'){$('#fee').focus()}else if(e.key==='n'){$('#next').click()}});
 </script>
 </body>
 </html>
