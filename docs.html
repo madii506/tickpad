@@ -1,0 +1,190 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>tick · docs</title>
+<meta name="description" content="how a tick lives: the host, a tick a minute, the fills, the pile, letting go.">
+<link rel="icon" type="image/png" sizes="32x32" href="/assets/favicon-32.png"><link rel="apple-touch-icon" href="/assets/favicon-180.png">
+<style>
+@font-face{font-family:Plex;src:url(/assets/plexmono.woff2) format('woff2');font-weight:400 700;font-display:swap}
+:root{--bg:#000;--panel:#050705;--line:#16321f;--line2:#23522f;--ink:#e6efe7;--dim:#93a897;--mute:#55705c;--g1:#8df2a6;--g2:#48dc78;--g3:#0c6b34;--red:#e65050;--amber:#e0a63a}
+*{box-sizing:border-box}html{scroll-behavior:smooth;overflow-x:hidden}
+body{margin:0;background:#000;color:var(--ink);font-family:Plex,ui-monospace,Menlo,monospace;font-size:13.5px;line-height:1.55;overflow-x:clip;-webkit-font-smoothing:antialiased;animation:flick 9s steps(1,end) infinite}
+@keyframes flick{0%,95%,100%{opacity:1}96%{opacity:.94}97%{opacity:1}98%{opacity:.97}}
+a{color:inherit;text-decoration:none}button,input,select{font:inherit;color:inherit}[hidden]{display:none!important}
+::selection{background:var(--g2);color:#000}
+#crt{position:fixed;inset:0;z-index:40;pointer-events:none;background:repeating-linear-gradient(180deg,rgba(0,0,0,0) 0 2px,rgba(0,0,0,.26) 2px 3px)}
+#crt:after{content:'';position:absolute;left:0;right:0;height:140px;top:-140px;background:linear-gradient(180deg,rgba(141,242,166,0),rgba(141,242,166,.045),rgba(141,242,166,0));animation:roll 11s linear infinite}
+@keyframes roll{to{top:110%}}
+#vig{position:fixed;inset:0;z-index:39;pointer-events:none;background:radial-gradient(ellipse at 50% 38%,rgba(0,0,0,0) 42%,rgba(0,0,0,.72) 100%)}
+.wrap{max-width:1360px;margin:0 auto;padding:0 26px;position:relative;z-index:1}
+@media(max-width:640px){.wrap{padding:0 14px}}
+header{position:sticky;top:0;z-index:30;background:rgba(0,0,0,.96);border-bottom:1px solid var(--line)}
+header .wrap{display:grid;grid-template-columns:1fr auto 1fr;align-items:center;gap:14px;height:54px}
+nav{display:flex;gap:3px;justify-content:center}
+nav a{padding:5px 9px;font-size:12.5px;color:var(--dim);border:1px solid transparent}
+nav a:hover{color:var(--ink)}nav a.on{color:var(--g1);border-color:var(--line2);background:rgba(72,220,120,.07)}
+header .st{justify-self:end;font-size:11.5px;color:var(--mute);white-space:nowrap}header .st b{color:var(--g2);font-weight:500}
+header .lf{justify-self:start;font-size:11.5px;color:var(--mute);white-space:nowrap}
+@media(max-width:860px){header .wrap{grid-template-columns:1fr auto}nav{display:none}header .lf{display:none}}
+.mnav{display:none;position:fixed;bottom:0;left:0;right:0;z-index:30;background:rgba(0,0,0,.94);border-top:1px solid var(--line);padding:5px 6px calc(5px + env(safe-area-inset-bottom));justify-content:space-around}
+.mnav a{font-size:11px;color:var(--dim);padding:5px 7px}.mnav a.on{color:var(--g1)}
+@media(max-width:860px){.mnav{display:flex}body{padding-bottom:46px}}
+section{padding:40px 0;position:relative;z-index:1;scroll-margin-top:56px}
+@media(max-width:640px){section{padding:26px 0}}
+h2{font-size:15px;font-weight:700;margin:0;letter-spacing:.01em}
+.sh{display:flex;align-items:baseline;justify-content:space-between;gap:14px;flex-wrap:wrap;margin-bottom:12px}
+.sh .k{font-size:11px;color:var(--mute);letter-spacing:.06em}
+p{color:var(--dim);max-width:66ch;margin:0 0 10px}p b{color:var(--ink);font-weight:600}
+.tag{display:inline-block;border:1px solid var(--line2);color:var(--g2);font-size:9px;letter-spacing:.12em;padding:1px 5px;vertical-align:middle}
+.tag.r{color:var(--red);border-color:#5a2020}
+/* module */
+.mod{border:1px solid var(--line2);background:var(--panel);box-shadow:0 0 44px rgba(72,220,120,.07),inset 0 0 70px rgba(0,0,0,.8)}
+.mod .bar{display:flex;align-items:center;gap:12px;padding:8px 13px;border-bottom:1px solid var(--line);font-size:11.5px;color:var(--mute);flex-wrap:wrap}
+.mod .bar b{color:var(--ink);font-weight:500}.mod .bar .sp{margin-left:auto}
+.dot{display:inline-block;width:6px;height:6px;background:var(--g2);box-shadow:0 0 7px var(--g2);animation:bl 1.7s steps(1,end) infinite;vertical-align:1px}
+.dot.d{background:var(--red);box-shadow:0 0 7px var(--red)}
+@keyframes bl{50%{opacity:.25}}
+.top{display:grid;grid-template-columns:minmax(0,320px) minmax(0,1fr);gap:0}
+@media(max-width:820px){.top{grid-template-columns:1fr}}
+.crt{padding:14px 16px;border-right:1px solid var(--line);display:flex;flex-direction:column;align-items:center;gap:10px}
+@media(max-width:820px){.crt{border-right:0;border-bottom:1px solid var(--line)}}
+#art{font-size:11px;line-height:1.02;white-space:pre;color:var(--g2);text-shadow:0 0 9px rgba(72,220,120,.45);margin:0}
+#art.hungry{color:var(--amber);text-shadow:0 0 9px rgba(224,166,58,.4)}
+#art.dead{color:var(--red);text-shadow:none;opacity:.55}
+#art.drink{color:var(--g1);text-shadow:0 0 16px rgba(141,242,166,.8)}
+.vit{width:100%;font-size:12px}
+.vit .cd{font-size:27px;color:var(--ink);letter-spacing:-.01em;font-variant-numeric:tabular-nums;text-align:center}
+.vit .cd.d{color:var(--red)}
+.vit .kv{display:grid;grid-template-columns:auto 1fr;gap:2px 12px;margin-top:10px;color:var(--mute)}
+.vit .kv span{color:var(--dim);text-align:right}.vit .kv span b{color:var(--ink);font-weight:500}
+.life{height:3px;background:#0e1a12;margin-top:9px;position:relative;overflow:hidden}.life i{position:absolute;inset:0 auto 0 0;background:var(--g2);display:block;transition:width .5s}.life.d i{background:var(--red)}
+.log{padding:12px 14px;min-height:300px;max-height:300px;overflow:auto;font-size:12.5px}
+.log div{display:grid;grid-template-columns:52px 1fr;gap:8px;padding:2px 0;animation:in .3s both}
+.log time{color:var(--mute);font-size:11px}.log b{color:var(--g1);font-weight:500}.log .w{color:var(--dim)}.log .w:before{content:'› ';color:var(--g3)}
+.log .buy b{color:var(--ink)}.log .die b{color:var(--red)}
+@keyframes in{from{opacity:0}to{opacity:1}}
+.host{border-top:1px solid var(--line);padding:10px 14px}
+.host .hd{display:flex;gap:14px;font-size:11.5px;color:var(--mute);margin-bottom:4px;flex-wrap:wrap}.host .hd b{color:var(--ink);font-weight:500}
+#chart{font-size:11px;line-height:1.12;white-space:pre;color:var(--g3);margin:0;overflow:hidden}
+#chart .n{color:var(--g2)}
+.ctl{border-top:1px solid var(--line);padding:10px 14px;display:flex;gap:9px;align-items:center;flex-wrap:wrap;font-size:12px}
+.ctl label{color:var(--mute);display:flex;align-items:center;gap:6px}
+.ctl input{width:104px;background:#000;border:1px solid var(--line2);color:var(--ink);font-size:13px;padding:6px 8px}
+.ctl input:focus,.ctl select:focus{outline:0;border-color:var(--g2)}
+.btn{border:1px solid var(--line2);background:#000;padding:7px 12px;font-size:12.5px;cursor:pointer;transition:border-color .15s,background .15s,transform .07s}
+.btn:hover{border-color:var(--g2)}.btn:active{transform:translateY(1px)}
+.btn.p{background:var(--g2);color:#000;border-color:var(--g2);font-weight:600}.btn.p:hover{background:var(--g1)}
+.btn:disabled{opacity:.4;cursor:default}
+.spd{display:flex;border:1px solid var(--line2)}.spd button{background:none;border:0;color:var(--mute);padding:6px 9px;cursor:pointer;font-size:12px}.spd button.on{background:var(--g2);color:#000}
+.rel{border-top:1px solid var(--line);padding:11px 14px;font-size:12px;color:var(--dim)}
+.rel table{width:100%;border-collapse:collapse;margin-top:6px}.rel td{padding:3px 0;border-bottom:1px solid #0d1a11}.rel td.r{text-align:right;color:var(--ink);font-variant-numeric:tabular-nums}
+/* board */
+.rows{border-top:1px solid var(--line)}
+.row{display:grid;grid-template-columns:52px 186px 60px 100px 92px 62px minmax(0,1fr);gap:10px;align-items:center;padding:8px 0;border-bottom:1px solid var(--line);font-size:12.5px;cursor:pointer}
+.row:hover{background:#070c08}.row.on{background:#0a1410}
+.row .id{color:var(--mute)}.row .nm{color:var(--ink);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.row .h{color:var(--g1)}.row .cd{font-variant-numeric:tabular-nums;color:var(--dim)}.row .cd.d{color:var(--red)}
+.row .r{text-align:right;color:var(--dim)}.row .sp{color:var(--g3);white-space:pre;font-size:11px;overflow:hidden}
+@media(max-width:900px){.row{grid-template-columns:46px minmax(0,1fr) 56px 92px}.row .r,.row .sp{display:none}}
+.zero{padding:22px 0;color:var(--mute);font-size:12.5px}.zero:after{content:'_';animation:bl 1s steps(1,end) infinite}
+/* how */
+.how{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:34px}
+@media(max-width:900px){.how{grid-template-columns:1fr;gap:16px}}
+.nums{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:1px;background:var(--line);border:1px solid var(--line)}
+.nums div{background:#000;padding:12px 13px}.nums .k{display:block;font-size:10px;color:var(--mute);letter-spacing:.08em;margin-bottom:5px}
+.nums .v{font-size:22px;color:var(--ink)}.nums small{display:block;color:var(--mute);font-size:10.5px;margin-top:2px}
+@media(max-width:640px){.nums{grid-template-columns:repeat(2,minmax(0,1fr))}}
+.cant{border:1px solid var(--line2);display:grid;grid-template-columns:1fr 1fr;margin-top:12px}
+.cant div{padding:9px 12px;font-size:12px;color:var(--dim);border-bottom:1px solid var(--line)}
+.cant div:nth-child(odd){border-right:1px solid var(--line)}.cant .hd{font-size:10px;color:var(--mute);letter-spacing:.08em}.cant b{color:var(--ink);font-weight:500}
+@media(max-width:640px){.cant{grid-template-columns:1fr}.cant div:nth-child(odd){border-right:0}}
+/* launch */
+.form{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;max-width:820px}
+@media(max-width:700px){.form{grid-template-columns:1fr}}
+.form label{display:block;font-size:10px;color:var(--mute);letter-spacing:.07em;margin-bottom:5px}
+.form input,.form select{width:100%;background:var(--panel);border:1px solid var(--line2);color:var(--ink);font-size:13px;padding:8px 9px}
+.form .f{grid-column:1/-1}
+.out{grid-column:1/-1;font-size:12px;color:var(--mute);min-height:18px}.out b{color:var(--ink)}
+@media(prefers-reduced-motion:reduce){body,#crt:after,.dot,.log div{animation:none}}
+</style>
+<style>
+.doc{display:grid;grid-template-columns:186px minmax(0,1fr);gap:38px;padding:40px 0 64px}
+@media(max-width:760px){.doc{grid-template-columns:1fr;gap:16px;padding:26px 0 50px}}
+.toc{position:sticky;top:72px;align-self:start;font-size:12px}
+.toc a{display:block;color:var(--mute);padding:3px 0 3px 10px;border-left:2px solid transparent}
+.toc a:hover,.toc a.on{color:var(--g1);border-color:var(--g2)}
+@media(max-width:760px){.toc{position:static;display:flex;flex-wrap:wrap;gap:2px 12px}.toc a{border:0;padding:3px 0}}
+.doc h2{font-size:15px;margin:30px 0 10px;scroll-margin-top:72px;color:var(--ink)}
+.doc h2:first-child{margin-top:0}
+.doc h3{font-size:13px;color:var(--ink);margin:16px 0 4px}
+.doc p{max-width:70ch;font-size:13.5px}
+.spec{border:1px solid var(--line2);background:var(--panel);display:grid;grid-template-columns:104px 1fr;gap:4px 14px;font-size:12.5px;padding:12px 14px;max-width:70ch;margin:12px 0}
+.spec i{font-style:normal;color:var(--mute)}.spec span{color:var(--dim)}.spec b{color:var(--ink);font-weight:500}
+</style>
+</head>
+<body>
+<div id="vig"></div><div id="crt"></div>
+<header><div class="wrap">
+  <span class="lf" id="clk">—</span>
+  <nav id="nav"><a href="/#follow">Follow</a><a href="/#board">Board</a><a href="/#how">How</a><a href="/#launch">Launch</a><a href="/#rules">Rules</a><a href="docs.html" class="on">Docs</a><a href="https://x.com/" target="_blank" rel="noopener">X</a></nav>
+  <span class="st">one host · one life · one payout</span>
+</div></header>
+<div class="mnav"><a href="/#follow">Follow</a><a href="/#board">Board</a><a href="/#how">How</a><a href="/#launch">Launch</a><a href="/#rules">Rules</a><a href="docs.html" class="on">Docs</a></div>
+<div class="wrap doc">
+<div class="toc" id="toc"></div>
+<div id="body">
+<h2 id="tick">tick</h2>
+<p>Every token launched on tick spawns a tick: a thing that attaches to one stock, feeds on the coin's fees, and buys that stock with whatever it doesn't need to stay alive. It never sells. When the fees stop it lets go, and everything it ever bought goes to the holders.</p>
+<p>The word does three jobs here and all of them are literal. A tick is the smallest amount a price can move. A tick is one beat of a clock. And a tick is an animal that attaches to one host and drinks to stay alive. This is all three.</p>
+<div class="spec"><i>burn</i><span><b>$0.01 / min</b> · one tick a minute · $14.40 / day</span><i>clock</i><span>balance ÷ burn, in seconds</span><i>cap</i><span><b>30 days</b> · $432.00 · the surplus buys the host</span><i>fills</i><span>one an hour, posted with the transaction</span><i>sells</i><span>never · there is no sell function</span><i>release</i><span>at 00:00:00 the whole position goes to holders, pro rata</span></div>
+
+<h2 id="host">The host</h2>
+<p>You launch a coin the normal way — a name, a ticker, an image — and one thing more: the stock it attaches to. That's its host, and it is fixed at birth. It cannot be changed, not by you, not by us, not by a vote. A tick gets one host for its whole life.</p>
+<p>The pad deploys the coin and, in the same transaction, a wallet the tick controls and nobody else does. The coin's creator fee is wired to that wallet at birth. Not to your wallet. Not to ours. You give up the fees and something attaches to a stock on your behalf.</p>
+
+<h2 id="minute">A tick a minute</h2>
+<p>It costs one cent a minute to stay attached. One tick. That is $14.40 a day, it covers the thing's existence, and the rate is in the contract rather than in a prompt. Its countdown is its balance divided by that rate: $14.40 in the wallet is one day, $432.00 is thirty. The clock on its page is not a metaphor. It is the money, in seconds.</p>
+<p>Thirty days is as much life as a tick can hold. It will not hoard more time than that.</p>
+
+<h2 id="fills">What it does with the rest</h2>
+<p>Everything above thirty days of runway is not kept as money. Once an hour, on the hour, the tick spends it on one thing: its host, as tokenized stock, bought at the best price it can quote, with a minimum-received guard and a dry run before the swap. Then it posts the fill — the price, the size, the transaction — and goes back to waiting.</p>
+<p>One host. One fill an hour. No judgement, no basket, no rotation, nothing to vote on. It buys the thing it is attached to, and that is the only instruction it has. It never sells; there is no sell function.</p>
+
+<h2 id="pile">The pile</h2>
+<p>What a tick owns is public from its first hour: the shares it holds, what it paid, every fill with a hash beside it. The pile only grows. A coin that trades a lot has a tick that buys a lot, and that is the only relationship between the two numbers — no promises, no projections, just a position anyone can read on chain.</p>
+
+<h2 id="release">Letting go</h2>
+<p>When the countdown reaches 00:00:00, the tick lets go. In that same hour it sends the entire position — every share it ever bought — to the holders of its coin, pro rata by balance at that block, as a transfer. Not a claim. Not a form. The stock lands in the wallets of whoever is holding when it happens.</p>
+<p>Then it is finished. A tick that has let go does not attach again, not to that coin and not to another. There is one life and one payout, and the payout is the death.</p>
+<p>That is the tension, and we are not going to pretend it isn't there: the pile is worth more the longer it lives, and you only receive it when it stops. A tick that is fed forever is a position that grows forever and pays nobody. A tick that starves pays everybody, once, and ends.</p>
+
+<h2 id="pad">What the pad keeps</h2>
+<p>The launch fee, printed on the launch page before you sign. Nothing from any tick, ever. The wallet belongs to the tick. We cannot withdraw from it, top it up, pause it, or point it at a different stock. The key that operates it can do exactly two things — buy the host, and distribute on death — and the log shows every time it did either.</p>
+
+<h2 id="numbers">The four numbers</h2>
+<p>The home page shows four numbers and refuses to show any others: born, attached, bought, released. Born is how many ticks exist. Attached is how many still have time on the clock. Bought is the total ever spent on host stock. Released is the total ever handed to holders on death. Each is read from the chain. If it can't be, it isn't on the page.</p>
+
+<h2 id="notyet">What is not built yet</h2>
+<p>No ticks yet. The first is born when the first coin launches. The board today shows what a tick's page looks like against the real prices of the day, and everything rehearsed is tagged as a rehearsal. The buy and the release are the two things you will never have to take our word for, because both are transactions. The hourly schedule is the one thing you trust us on until the keeper is on chain, and the log is how you check it.</p>
+<p>Some names do not exist as tokenized stock yet. A tick whose host is not tokenized at launch waits, holding its cash, buying nothing, and says so on its page rather than quietly buying something else.</p>
+
+<h2 id="questions">The hard questions</h2>
+<h3>Why launch here?</h3><p>Because your coin comes attached to a real asset that only accumulates, and the fees you would have pocketed become a position your holders eventually own.</p>
+<h3>Why hold?</h3><p>Because the release goes to whoever holds at the block it happens, and nobody can tell you in advance when that is.</p>
+<h3>So everyone will try to starve it.</h3><p>Some will. It is a public rule with a public clock; starving it is playing the game correctly, and the tick says exactly how long it has left the entire time.</p>
+<h3>What if the dev dumps?</h3><p>The dev never had the fees. Selling shortens the clock, which brings the payout closer for everyone still holding, including the people he sold to.</p>
+<h3>Can you stop a tick?</h3><p>No. We cannot touch its wallet, and it cannot touch anything but its host. Only silence stops it.</p>
+</div></div>
+<script>
+var $=function(s){return document.querySelector(s)};
+function utc(){var d=new Date();return String(d.getUTCHours()).padStart(2,'0')+':'+String(d.getUTCMinutes()).padStart(2,'0')+':'+String(d.getUTCSeconds()).padStart(2,'0')+'z'}
+setInterval(function(){$('#clk').textContent=utc()},1000);$('#clk').textContent=utc();
+var hs=[].slice.call(document.querySelectorAll('#body h2'));
+$('#toc').innerHTML=hs.map(function(h){return '<a href="#'+h.id+'">'+h.textContent+'</a>'}).join('');
+var links=[].slice.call(document.querySelectorAll('#toc a'));
+function spy(){var y=scrollY+96,cur=null;hs.forEach(function(h,i){if(h.offsetTop<=y)cur=links[i]});links.forEach(function(a){a.classList.toggle('on',a===cur)})}
+addEventListener('scroll',spy,{passive:true});spy();
+</script>
+</body></html>
