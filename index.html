@@ -126,6 +126,33 @@ p{color:var(--dim);max-width:66ch;margin:0 0 10px}p b{color:var(--ink);font-weig
 .cant div{padding:9px 12px;font-size:12px;color:var(--dim);border-bottom:1px solid var(--line)}
 .cant div:nth-child(odd){border-right:1px solid var(--line)}.cant .hd{font-size:10px;color:var(--mute);letter-spacing:.08em}.cant b{color:var(--ink);font-weight:500}
 @media(max-width:640px){.cant{grid-template-columns:1fr}.cant div:nth-child(odd){border-right:0}}
+/* long sections */
+.two{display:grid;grid-template-columns:minmax(0,1.1fr) minmax(0,.9fr);gap:34px;align-items:start}
+@media(max-width:860px){.two{grid-template-columns:minmax(0,1fr);gap:22px}}
+.pre{font-size:11.5px;line-height:1.36;white-space:pre;overflow-x:auto;color:var(--dim);margin:0;padding-bottom:4px}
+.pre b{color:var(--ink);font-weight:500}
+.tbl{width:100%;border-collapse:collapse;font-size:12.5px}
+.tbl td{padding:7px 0;border-bottom:1px solid var(--line);color:var(--dim)}
+.tbl td.r{text-align:right;color:var(--ink);font-variant-numeric:tabular-nums}
+.tbl tr:last-child td{border-bottom:0}
+.conv{display:flex;align-items:center;gap:9px;margin-top:12px;flex-wrap:wrap;font-size:12.5px;color:var(--mute)}
+.conv input{width:118px;background:#000;border:1px solid var(--line2);color:var(--ink);font-size:13px;padding:6px 8px}
+.conv input:focus{outline:0;border-color:var(--g2)}
+.conv b{color:var(--ink);font-weight:500;font-variant-numeric:tabular-nums}
+.wal{border:1px solid var(--line2);background:var(--panel);padding:15px 17px}
+.wal .lb{font-size:9.5px;letter-spacing:.09em;color:var(--mute);text-transform:uppercase}
+.wal .addr{font-size:13.5px;color:var(--ink);word-break:break-all;margin:5px 0 2px;line-height:1.45}
+.wal .bal{font-size:26px;color:var(--ink);font-variant-numeric:tabular-nums;margin-top:12px}
+.wal .asof{font-size:11px;color:var(--mute)}
+.wal .cp{margin-top:11px}
+.qa{border-top:1px solid var(--line)}
+.qa>div{padding:13px 0;border-bottom:1px solid var(--line)}
+.qa q{display:block;quotes:none;color:var(--ink);font-size:13.5px;margin-bottom:5px}
+.qa p{margin:0;max-width:78ch}
+ol.rul{list-style:none;counter-reset:r;margin:0;padding:0;display:grid;grid-template-columns:1fr 1fr;gap:0 34px}
+@media(max-width:860px){ol.rul{grid-template-columns:1fr}}
+ol.rul li{counter-increment:r;position:relative;padding:10px 0 10px 34px;border-bottom:1px solid var(--line);color:var(--dim);font-size:13px}
+ol.rul li:before{content:counter(r,decimal-leading-zero);position:absolute;left:0;top:11px;font-size:11px;color:var(--mute)}
 /* launch */
 .form{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;max-width:820px}
 @media(max-width:700px){.form{grid-template-columns:1fr}}
@@ -141,16 +168,16 @@ p{color:var(--dim);max-width:66ch;margin:0 0 10px}p b{color:var(--ink);font-weig
 <header>
   <div class="wrap">
     <span class="lf" id="clk">—</span>
-    <nav id="nav"><a href="#follow">Follow</a><a href="#board">Board</a><a href="#how">How</a><a href="#launch">Launch</a><a href="#rules">Rules</a><a href="docs.html">Docs</a><a id="xl" href="https://x.com/" target="_blank" rel="noopener">X</a></nav>
+    <nav id="nav"><a href="#follow">Follow</a><a href="#board">Board</a><a href="#how">How</a><a href="#hour">Hour</a><a href="#launch">Launch</a><a href="#wallet">Wallet</a><a href="#ask">Ask</a><a href="docs.html">Docs</a><a id="xl" href="https://x.com/" target="_blank" rel="noopener">X</a></nav>
     <span class="st" id="stat">—</span>
   </div>
 </header>
-<div class="mnav" id="mnav"><a href="#follow">Follow</a><a href="#board">Board</a><a href="#how">How</a><a href="#launch">Launch</a><a href="#rules">Rules</a><a href="docs.html">Docs</a></div>
+<div class="mnav" id="mnav"><a href="#follow">Follow</a><a href="#board">Board</a><a href="#how">How</a><a href="#hour">Hour</a><a href="#launch">Launch</a><a href="#wallet">Wallet</a><a href="#ask">Ask</a><a href="docs.html">Docs</a></div>
 
 <section id="follow">
   <div class="wrap">
     <div class="mod">
-      <div class="bar"><span class="dot" id="dot"></span><span>tick://<b id="mId">—</b></span><span>host <b id="mHost">—</b></span><span id="mState">—</span><span class="sp tag" id="mTag">REHEARSAL</span></div>
+      <div class="bar"><span class="dot" id="dot"></span><span>tick://<b id="mId">—</b></span><span>host <b id="mHost">—</b></span><span id="mState">—</span><span class="sp" id="mTag"></span></div>
       <div class="tape"><div class="tr" id="tape"></div></div>
       <div class="top">
         <div class="crt">
@@ -176,7 +203,7 @@ p{color:var(--dim);max-width:66ch;margin:0 0 10px}p b{color:var(--ink);font-weig
         <div><i>balance</i><b id="iBal">—</b></div>
         <div><i>taken in</i><b id="iFed">—</b></div>
         <div><i>next fill</i><b id="iFill">—</b></div>
-        <div><i>wallet</i><b id="iW" class="s">—</b></div>
+        <div><i>pad wallet</i><b id="iW" class="s">—</b></div>
         <div><i>prices</i><b id="iSrc" class="s">—</b></div>
       </div>
       <div class="host">
@@ -230,6 +257,47 @@ p{color:var(--dim);max-width:66ch;margin:0 0 10px}p b{color:var(--ink);font-weig
   </div>
 </section>
 
+<section id="hour">
+  <div class="wrap">
+    <div class="sh"><h2>The hour</h2><span class="k">ONE FILL, ON THE HOUR, OR A REASON WHY NOT</span></div>
+    <div class="two">
+      <div>
+        <pre class="pre">+-- <b>:00</b> ------------------------------------------------+
+|                                                       |
+|   read the wallet                                     |
+|   balance  -  thirty days of runway  =  the surplus   |
+|                                                       |
+|   surplus &lt;= 0   -&gt;  buy nothing, and say so          |
+|   surplus  &gt; 0   -&gt;  quote the host                   |
+|                      dry run the swap                 |
+|                      swap, with a minimum received    |
+|                                                       |
+|   post the fill: price, size, transaction hash        |
+|                                                       |
++-- <b>:01</b> ------------------------------------------------+
+|   wait                                                |
++-------------------------------------------------------+</pre>
+        <p style="margin-top:14px">No judgement enters that loop. There is no basket, no rotation, no signal and nothing to vote on. It buys the one stock it was born attached to, or it buys nothing and says which.</p>
+      </div>
+      <div>
+        <div class="sh" style="margin-bottom:6px"><h2 style="font-size:13px">What a dollar buys</h2></div>
+        <table class="tbl">
+          <tr><td>one cent</td><td class="r">1 minute</td></tr>
+          <tr><td>$0.60</td><td class="r">1 hour</td></tr>
+          <tr><td>$14.40</td><td class="r">1 day</td></tr>
+          <tr><td>$100.80</td><td class="r">7 days</td></tr>
+          <tr><td>$432.00</td><td class="r">30 days &mdash; the cap</td></tr>
+          <tr><td>anything above that</td><td class="r">host stock, that hour</td></tr>
+        </table>
+        <div class="conv">
+          <span>feed it</span><input id="cvIn" inputmode="decimal" placeholder="USDG"><span>and it lives</span><b id="cvOut">&mdash;</b>
+        </div>
+        <p style="margin-top:14px;font-size:12.5px">Thirty days is the ceiling, not a target. A tick cannot hoard more time than that, which is the only reason the pile ever grows.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
 <section id="launch">
   <div class="wrap">
     <div class="sh"><h2>Launch a tick</h2><span class="k" id="lNote">NOTHING IS DEPLOYED · REHEARSAL IN YOUR BROWSER</span></div>
@@ -243,18 +311,80 @@ p{color:var(--dim);max-width:66ch;margin:0 0 10px}p b{color:var(--ink);font-weig
   </div>
 </section>
 
+<section id="wallet">
+  <div class="wrap">
+    <div class="sh"><h2>The wallet</h2><span class="k">READ IT YOURSELF</span></div>
+    <div class="two">
+      <div class="wal">
+        <span class="lb">pad wallet</span>
+        <div class="addr" id="wAddr">&mdash;</div>
+        <button class="btn cp" id="wCopy">Copy address</button>
+        <div class="bal" id="wBal">&mdash;</div>
+        <div class="asof">balance read <span id="wAsof">&mdash;</span> &middot; not a live read, and it will move</div>
+      </div>
+      <div>
+        <p>This is the only address on the site. Every tick gets its own wallet at birth, deployed in the same transaction as its coin, and the coin's creator fee is wired straight into it &mdash; not to the dev, not here.</p>
+        <p>The key that operates a tick's wallet can do exactly two things: buy the host, and distribute on death. It cannot sell, cannot transfer out, cannot be paused and cannot be pointed at a different stock. There is no upgrade path and no admin key behind it.</p>
+        <p>None of that has to be taken on faith. The buy and the release are both transactions, so every one of them is a hash you can open. The hourly schedule is the single thing you trust until the keeper is on chain, and the log on each tick is how you check it.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
 <section id="rules">
   <div class="wrap">
-    <div class="sh"><h2>What the pad keeps</h2><span class="k">THE LAUNCH FEE. NOTHING FROM ANY TICK.</span></div>
-    <p>The wallet belongs to the tick. We cannot withdraw from it, top it up, pause it, or point it at a different stock. The key can do two things: buy the host, and distribute on death.</p>
-    <p class="k" style="color:var(--mute)">Prices read live. Every rehearsed figure on this page is tagged. Nothing above is deployed yet.</p>
+    <div class="sh"><h2>The rules, frozen</h2><span class="k">NINE LINES, NONE OF THEM OPTIONAL</span></div>
+    <ol class="rul">
+      <li>One host, named at launch, fixed for the whole life. It cannot be changed by you, by us, or by a vote.</li>
+      <li>The coin's creator fee is wired to the tick's own wallet at birth. Not to the dev's wallet. Not to ours.</li>
+      <li>One cent a minute to stay attached. The rate is in the contract, not in a setting.</li>
+      <li>Thirty days is the most clock a tick can hold. It will not hoard more time than that.</li>
+      <li>Everything above thirty days buys the host, once an hour, with a minimum received and a dry run first.</li>
+      <li>Every fill is posted: the price, the size, and the hash.</li>
+      <li>There is no sell function. A share it has bought, it has bought for good.</li>
+      <li>At 00:00:00 the entire position goes to the holders of its coin, pro rata, in that same hour. A transfer, not a claim.</li>
+      <li>A tick that has let go never attaches again. One life, one payout.</li>
+    </ol>
+    <p style="margin-top:16px">The pad keeps the launch fee, printed on the launch page before you sign, and takes nothing from any tick at any point after that.</p>
+    <p class="k" style="color:var(--mute)">Prices read live. The board above is a rehearsal in your browser. Nothing is deployed yet.</p>
+  </div>
+</section>
+
+<section id="ask">
+  <div class="wrap">
+    <div class="sh"><h2>The hard questions</h2><span class="k">ASKED BEFORE YOU ASK THEM</span></div>
+    <div class="qa">
+      <div><q>Why launch here instead of anywhere else?</q><p>Because your coin comes out of the gate attached to a real asset that only accumulates, and the fees you would have pocketed turn into a position your holders eventually own outright.</p></div>
+      <div><q>Why would anyone hold?</q><p>Because the release goes to whoever holds at the block it happens, and nobody &mdash; not the dev, not the pad &mdash; can tell you in advance when that block is.</p></div>
+      <div><q>So everyone will just try to starve it.</q><p>Some will, and that is playing the game correctly. It is a public rule with a public clock, and the tick says exactly how much time it has left the entire way down.</p></div>
+      <div><q>What if the dev dumps?</q><p>The dev never had the fees to dump. Selling shortens the clock, which brings the payout closer for everyone still holding &mdash; including the people he sold to.</p></div>
+      <div><q>Can you stop a tick?</q><p>No. We cannot touch its wallet, and it cannot touch anything but its host. Only silence stops it.</p></div>
+      <div><q>What happens if the host is not tokenized yet?</q><p>It waits, holding the cash and buying nothing, and it says so on its own page rather than quietly buying something else.</p></div>
+    </div>
+  </div>
+</section>
+
+<section id="soon">
+  <div class="wrap">
+    <div class="sh"><h2>What is not built yet</h2><span class="k">THE HONEST LIST</span></div>
+    <div class="two">
+      <div>
+        <p>No ticks exist. The first one is born when the first coin launches, and the four numbers above stay at zero until then &mdash; a dash is not a zero and a zero is not a guess.</p>
+        <p>The keeper that runs the hour is not on chain yet. The board you can play with is a rehearsal running in your own browser against the real prices of the day; clear it whenever you like with <b>Reset board</b>.</p>
+      </div>
+      <div>
+        <p>What is real on this page: the prices, read from the market; the wallet address and its balance, read on the date shown; and the rules, which are the same ones that go into the contract.</p>
+        <p>What is not: every tick on the board, its balance, its fills and its release. Those are there so you can see the shape of the thing before you put money near it.</p>
+      </div>
+    </div>
   </div>
 </section>
 
 <script>
-var CONFIG={x:'',ca:''};
+var CONFIG={x:'',ca:'',wallet:'0x7415db03c222B750f543714486F9146ba01cF25a',walletBal:615.41,walletAsof:'2026-09-20'};
 var $=function(s){return document.querySelector(s)},$$=function(s){return [].slice.call(document.querySelectorAll(s))};
 if(CONFIG.x)$('#xl').href=CONFIG.x;
+addEventListener('DOMContentLoaded',function(){});
 var FRAMES=[["     #               #     ", "     #    ##   ##    #     ", "     #     #####     #     ", "     ##     ###     ##     ", " #    ##   #####   ##    # ", " ##    #############    ## ", "  ##    ###########    ##  ", "    ###################    ", "       #############       ", "       #############       ", "       #############       ", "   #####################   ", " ##     ###########     ## ", "#       ###########       #", "      ##  #######  ##      ", "    ##       #       ##    ", "    #                 #    "], ["                           ", "      #             #      ", "     ##    #   #    ##     ", "     ##     ###     ##     ", "      ##    ###    ##      ", "  #    ##  #####  ##    #  ", "   #     #########     #   ", "    ###################    ", "       #############       ", "       #############       ", "       #############       ", "   #####################   ", " ##     ###########     ## ", " #     #############     # ", "     ###   #####   ###     ", "     #               #     ", "    ##               ##    "], ["                           ", "      #             #      ", "      #   #     #   #      ", "      #    #####    #      ", "      ##    ###    ##      ", "  ##   ##   ###   ##   ##  ", "   ##    #########    ##   ", "    #### ######### ####    ", "       #############       ", "        ###########        ", "       #############       ", "   #####################   ", "  ##     #########     ##  ", "       #############       ", "     ###           ###     ", "     ##             ##     ", "     #               #     "], ["                           ", "                           ", "       #           #       ", "      ##  ##   ##  ##      ", "      ##   #####   ##      ", "   #   ##   ###   ##   #   ", "   ##   ###########   ##   ", "     ###  #######  ###     ", "       #############       ", "         #########         ", "      ###############      ", "    ###  #########  ###    ", "  ##     #########     ##  ", "       ##   ###   ##       ", "      #             #      ", "      #             #      ", "     ##             ##     "], ["                           ", "                           ", "       #           #       ", "       #           #       ", "       #   #   #   #       ", "   #   ##   ###   ##   #   ", "    #   ##  ###  ##   #    ", "     ##   #######   ##     ", "       #############       ", "          #######          ", "      ###############      ", "    ###   #######   ###    ", "   ##   ###########   ##   ", "       ##         ##       ", "      ##           ##      ", "      #             #      ", "      #             #      "], ["                           ", "                           ", "                           ", "        #         #        ", "        # #     # #        ", "       ##  #####  ##       ", "    ##  ##  ###  ##  ##    ", "     ##   #######   ##     ", "      ###############      ", "          #######          ", "      ###############      ", "     ##   #######   ##     ", "   ##   ###  #  ###   ##   ", "       ##         ##       ", "       #           #       ", "       #           #       ", "                           "]];
 var BURN=0.01/60, CAP=30*86400*BURN, KEY='tick.rehearsal.v2';
 var HOSTS=['NVDA','AAPL','MSFT','AMZN','GOOGL','AVGO','GOOG','META','MU','TSLA'];
@@ -347,9 +477,9 @@ function vitals(){var t=get(SEL);if(!t)return;var b=bal(t),st=stateOf(t),d=t.rel
   $('#iBal').textContent=fmt(b);$('#iBal').className=d?'d':'';
   $('#iFed').textContent=fmt(t.fed);
   $('#iFill').textContent=d?'—':cd(toFill());
-  $('#iW').textContent=txh('w'+t.id).slice(0,18)+'…';
+  $('#iW').textContent=CONFIG.wallet.slice(0,10)+'…'+CONFIG.wallet.slice(-6);
   var qq=Q&&Q[t.host];$('#iSrc').textContent=qq?(qq.live?'live':'snapshot '+qq.asof):'—';
-  $('#dot').className='dot'+(d?' d':'');$('#mTag').className='sp tag'+(d?' r':'');
+  $('#dot').className='dot'+(d?' d':'');
   var q=Q&&Q[t.host];
   if(q){$('#cPx').textContent=q.price.toFixed(2);$('#cName').textContent=q.name;
     var c=q.prev?(q.price/q.prev-1)*100:null;
@@ -408,7 +538,7 @@ function render(){var box=$('#rowsBox');
     '<span class="r">'+(t.shares?sh(t.shares).slice(0,7):'—')+'</span><span class="r">'+t.fills+' fl</span>'+
     '<span class="sp">'+(q?spark(q.closes):'')+'</span></div>'}).join('')+'</div>';
   $$('#rowsBox .row').forEach(function(el){el.onclick=function(){follow(el.dataset.id)}});stats()}
-function stats(){var a=B.filter(alive).length;$('#stat').innerHTML='<b>'+a+'</b> attached · '+B.length+' born <span class="tag">REHEARSAL</span>';
+function stats(){var a=B.filter(alive).length;$('#stat').innerHTML='<b>'+a+'</b> attached · '+B.length+' born';
   $('#nBorn').textContent='0';$('#nAtt').textContent='0';$('#nBought').textContent='$0.00';$('#nRel').textContent='$0.00'}
 // ---------- quotes ----------
 function quotes(){return fetch('/api/quote').then(function(r){return r.json()}).then(function(j){Q=j.quotes;VIA=j.via;
@@ -505,6 +635,17 @@ function loop(ms){var dt=Math.min(0.25,(ms-last)/1000);last=ms;BREATH++;
   var d=new Date();$('#clk').textContent=utc()+(SPEED>1?' · '+SPEED+'×':'');
   $$('[data-cd]').forEach(function(el){var t=get(el.dataset.cd);if(t){el.textContent=cd(bal(t)/BURN);el.className='cd'+((t.dead||bal(t)<=0)?' d':'')}});
   vitals();art();ecg(dt);requestAnimationFrame(loop)}
+// ---------- the wallet, the converter ----------
+$('#wAddr').textContent=CONFIG.wallet;
+$('#wBal').textContent=fmt(CONFIG.walletBal);
+$('#wAsof').textContent=CONFIG.walletAsof;
+$('#wCopy').onclick=function(){var b=$('#wCopy');
+  function done(okk){b.textContent=okk?'Copied':'Select it and copy';setTimeout(function(){b.textContent='Copy address'},1600)}
+  try{navigator.clipboard.writeText(CONFIG.wallet).then(function(){done(true)},function(){done(false)})}catch(e){done(false)}};
+$('#cvIn').addEventListener('input',function(){var v=parseFloat(this.value);
+  if(!(v>0)){$('#cvOut').textContent='—';return}
+  var secs=Math.min(v,CAP)/BURN,over=v>CAP?v-CAP:0;
+  $('#cvOut').textContent=cd(secs)+(over>0?'  ·  '+fmt(over)+' straight into '+'stock':'')});
 // ---------- boot ----------
 render();quotes().then(function(){follow(B[0].id,false);setInterval(quotes,60000)});
 requestAnimationFrame(loop);
